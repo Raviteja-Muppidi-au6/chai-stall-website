@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chai & Co. — Tea Stall</title>
+  <meta name="description" content="Chai & Co. — fresh chai, cozy vibes. Menu, hours, contact and quick order." />
+  <style>
+    :root{
+      --bg:#fffdfa;
+      --accent:#b33f1a; /* chai color */
+      --accent-2:#f4a261;
+      --muted:#6b6b6b;
+      --card:#fff5f0;
+      --glass: rgba(255,255,255,0.6);
+      --max-width:1100px;
+      --radius:14px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(244,162,97,0.05), transparent 8%),
+        linear-gradient(180deg,#fffdfa 0%, #fff 100%);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.35;
+      padding:32px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:var(--max-width);
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.8));
+      border-radius:20px;
+      box-shadow: 0 8px 30px rgba(18,18,18,0.08);
+      padding:28px;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:22px;
+    }
+
+    header{
+      grid-column:1 / -1;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin-bottom:6px;
+    }
+
+    .logo{
+      width:76px;
+      height:76px;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+      font-size:22px;
+      box-shadow:0 8px 18px rgba(179,63,26,0.18), inset 0 -6px 10px rgba(0,0,0,0.06);
+      flex-shrink:0;
+    }
+
+    h1{
+      margin:0;
+      font-size:20px;
+      letter-spacing:0.2px;
+    }
+    .tag{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    main{
+      padding:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.3));
+      border-radius:14px;
+      min-height:320px;
+    }
+
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .hero-left{
+      max-width:56%;
+    }
+
+    .hero h2{
+      margin:0 0 6px 0;
+      font-size:18px;
+    }
+    .hero p{margin:0;color:var(--muted);font-size:14px}
+
+    .cta-row{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      border:0;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      background:var(--accent);
+      color:white;
+      box-shadow:0 6px 14px rgba(179,63,26,0.14);
+    }
+    .btn.ghost{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid rgba(179,63,26,0.12);
+      box-shadow:none;
+      font-weight:700;
+    }
+
+    /* Menu */
+    .menu{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .category{
+      background:linear-gradient(180deg,var(--card), rgba(255,255,255,0.85));
+      padding:12px;
+      border-radius:12px;
+    }
+    .category h3{margin:0 0 8px 0;font-size:15px}
+    .item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.04)}
+    .item:last-child{border-bottom:0}
+    .item .left{display:flex;gap:10px;align-items:center}
+    .item .name{font-weight:600}
+    .price{font-weight:700;color:var(--accent)}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* Sidebar */
+    aside{
+      background:linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.5));
+      border-radius:12px;
+      padding:16px;
+      height:fit-content;
+    }
+
+    .hours p{margin:6px 0;color:var(--muted);font-size:13px}
+    .contact{margin-top:10px;font-size:14px}
+    .contact a{color:var(--accent);text-decoration:none;font-weight:700}
+
+    /* Cart */
+    .cart{
+      margin-top:12px;
+      border-radius:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      padding:10px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .cart-list{max-height:220px;overflow:auto;margin:6px 0}
+    .cart-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.04)}
+    .qty{display:inline-flex;gap:6px;align-items:center}
+    .qty button{border:1px solid rgba(0,0,0,0.06);background:transparent;padding:4px 8px;border-radius:8px;cursor:pointer}
+    .total{display:flex;justify-content:space-between;font-weight:800;padding-top:8px}
+    .place-order{margin-top:10px;width:100%;padding:10px;border-radius:10px;background:var(--accent);color:white;border:0;cursor:pointer;font-weight:800}
+
+    footer{grid-column:1 / -1;padding-top:8px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .wrap{grid-template-columns:1fr; padding:18px}
+      .hero-left{max-width:100%}
+      .menu{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-labelledby="site-title">
+    <header>
+      <div class="logo" aria-hidden="true">☕</div>
+      <div>
+        <h1 id="site-title">THE SA</h1>
+        <p class="tag">Fresh chai • warm smiles • quick bites</p>
+      </div>
+    </header>
+
+    <main aria-label="Main content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-left">
+          <h2 id="hero-title">Welcome — your neighborhood tea stall</h2>
+          <p>Comforting masala chai, refreshing iced tea, and tasty snacks. Grab a cup, stay a while (or carry on!).</p>
+          <div class="cta-row">
+            <button class="btn" id="scroll-menu" aria-controls="menu">View menu</button>
+            <button class="btn ghost" id="call-btn">Call to order</button>
+          </div>
+        </div>
+        <div class="hero-right" aria-hidden="true" style="text-align:right">
+          <!-- decorative tea cup svg -->
+          <svg width="120" height="120" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="tea cup illustration">
+            <rect width="64" height="64" rx="12" fill="url(#g)"/>
+            <path d="M45 28c3.5 0 6.5 2.7 6.5 6 0 6-6 8-15 8s-15-2-15-8 6-8 15-8c1.2 0 2.4.05 3.5.18" fill="#fff5ee" opacity=".9"/>
+            <path d="M43 18c0 4-8 4-8 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+            <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#fef3ef"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>
+          </svg>
+        </div>
+      </section>
+
+      <section id="menu" aria-label="Menu">
+        <h3 style="margin-top:0">Menu</h3>
+        <div class="menu" id="menu-grid">
+          <div class="category" data-category="Tea">
+            <h3>Tea</h3>
+            <div class="item" data-id="chai-regular">
+              <div class="left">
+                <div>
+                  <div class="name">Masala Chai</div>
+                  <div class="small">Classic — ginger, cardamom</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹30</div>
+                <button class="btn" data-action="add" data-id="chai-regular" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-id="chai-ginger">
+              <div class="left">
+                <div>
+                  <div class="name">Ginger Chai</div>
+                  <div class="small">Extra ginger kick</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹35</div>
+                <button class="btn" data-action="add" data-id="chai-ginger" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-id="lemon-tea">
+              <div class="left">
+                <div>
+                  <div class="name">Lemon Tea</div>
+                  <div class="small">Refreshing, caffeine-light</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹30</div>
+                <button class="btn" data-action="add" data-id="lemon-tea" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="category" data-category="Snacks">
+            <h3>Snacks</h3>
+            <div class="item" data-id="samosa">
+              <div class="left">
+                <div>
+                  <div class="name">Samosa</div>
+                  <div class="small">Crispy potato samosa</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹25</div>
+                <button class="btn" data-action="add" data-id="samosa" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-id="kebab-roll">
+              <div class="left">
+                <div>
+                  <div class="name">Veg Roll</div>
+                  <div class="small">Paneer & veggies</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹60</div>
+                <button class="btn" data-action="add" data-id="kebab-roll" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-id="parle-g">
+              <div class="left">
+                <div>
+                  <div class="name">Biscuits</div>
+                  <div class="small">Parle-G / Marie</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹10</div>
+                <button class="btn" data-action="add" data-id="parle-g" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="category" data-category="Cold">
+            <h3>Cold</h3>
+            <div class="item" data-id="iced-tea">
+              <div class="left">
+                <div>
+                  <div class="name">Iced Tea</div>
+                  <div class="small">Lemon / Peach</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹45</div>
+                <button class="btn" data-action="add" data-id="iced-tea" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+            <div class="item" data-id="cold-coffee">
+              <div class="left">
+                <div>
+                  <div class="name">Cold Coffee</div>
+                  <div class="small">Sweet & frothy</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹65</div>
+                <button class="btn" data-action="add" data-id="cold-coffee" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="category" data-category="Combos">
+            <h3>Combos</h3>
+            <div class="item" data-id="chai-samosa-combo">
+              <div class="left">
+                <div>
+                  <div class="name">Chai + Samosa</div>
+                  <div class="small">Saves ₹5</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">₹50</div>
+                <button class="btn" data-action="add" data-id="chai-samosa-combo" style="margin-top:8px;padding:6px 10px;font-size:13px">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside aria-label="Sidebar">
+      <div class="hours" aria-hidden="false">
+        <strong>Hours</strong>
+        <p>Mon–Sun: 7:30 AM — 10:30 PM</p>
+        <p class="small">Late nights on weekends</p>
+      </div>
+
+      <div class="contact" style="margin-top:12px">
+        <strong>Contact</strong>
+        <p class="small">Visit: Near Market Lane, Your City</p>
+        <p class="small">Phone: <a href="tel:+911234567890">+91 12345 67890</a></p>
+        <p class="small">Follow: <a href="#" aria-label="Instagram profile">@chaicofficial</a></p>
+      </div>
+
+      <div class="cart" aria-live="polite" aria-atomic="true">
+        <strong>Your Order</strong>
+        <div class="cart-list" id="cart-list" role="list"></div>
+        <div class="total">
+          <div>Total</div>
+          <div id="total-amount">₹0</div>
+        </div>
+        <button class="place-order" id="place-order">Place Order</button>
+      </div>
+
+    </aside>
+
+    <footer>
+      <div>©️ <span id="year"></span> Chai & Co. — Made with ❤️ for local chai lovers.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Simple data store for menu items (id -> details)
+    const MENU = {
+      "chai-regular": {name:"Masala Chai", price:30},
+      "chai-ginger": {name:"Ginger Chai", price:35},
+      "lemon-tea": {name:"Lemon Tea", price:30},
+      "samosa": {name:"Samosa", price:25},
+      "kebab-roll": {name:"Veg Roll", price:60},
+      "parle-g": {name:"Biscuits", price:10},
+      "iced-tea": {name:"Iced Tea", price:45},
+      "cold-coffee": {name:"Cold Coffee", price:65},
+      "chai-samosa-combo": {name:"Chai + Samosa Combo", price:50}
+    };
+
+    // Cart state {id: qty}
+    const cart = {};
+
+    // DOM refs
+    const cartList = document.getElementById('cart-list');
+    const totalAmount = document.getElementById('total-amount');
+    const placeOrderBtn = document.getElementById('place-order');
+    const scrollMenuBtn = document.getElementById('scroll-menu');
+    const callBtn = document.getElementById('call-btn');
+
+    // set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Add event listeners to add buttons
+    document.querySelectorAll('button[data-action="add"]').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        addToCart(id, 1);
+      });
+    });
+
+    scrollMenuBtn.addEventListener('click', ()=> {
+      document.getElementById('menu').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    callBtn.addEventListener('click', ()=> {
+      // phone link from page
+      window.location.href = 'tel:+911234567890';
+    });
+
+    placeOrderBtn.addEventListener('click', ()=>{
+      if (Object.keys(cart).length === 0) {
+        alert('Your order is empty — add something tasty!');
+        return;
+      }
+      // Simulate order placement: gather cart items & total
+      const items = Object.entries(cart).map(([id,qty])=>{
+        return `${qty}× ${MENU[id].name} (₹${MENU[id].price})`;
+      }).join('\n');
+
+      const total = calculateTotal();
+      // For a real stall you would send this to backend or display a QR/pay option.
+      const msg = `Order placed!\n\n${items}\n\nTotal: ₹${total}\n\nShow this to the vendor or call ahead.`;
+      alert(msg);
+      // clear cart
+      Object.keys(cart).forEach(k=>delete cart[k]);
+      renderCart();
+    });
+
+    function addToCart(id, qty){
+      if (!MENU[id]) return;
+      cart[id] = (cart[id] || 0) + qty;
+      if (cart[id] <= 0) delete cart[id];
+      renderCart();
+    }
+
+    function calculateTotal(){
+      return Object.entries(cart).reduce((sum,[id,qty]) => sum + (MENU[id].price * qty), 0);
+    }
+
+    function renderCart(){
+      cartList.innerHTML = '';
+      if (Object.keys(cart).length === 0) {
+        cartList.innerHTML = '<div class="small" style="padding:8px;color:var(--muted)">Your cart is empty</div>';
+        totalAmount.textContent = '₹0';
+        return;
+      }
+
+      for (const [id,qty] of Object.entries(cart)) {
+        const row = document.createElement('div');
+        row.className = 'cart-row';
+        row.setAttribute('role','listitem');
+        row.innerHTML = `
+          <div>
+            <div style="font-weight:700">${MENU[id].name}</div>
+            <div class="small">₹${MENU[id].price} × ${qty}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:800">₹${MENU[id].price * qty}</div>
+            <div class="qty" style="margin-top:6px">
+              <button aria-label="Decrease ${MENU[id].name}" data-action="dec" data-id="${id}">−</button>
+              <div style="min-width:22px;text-align:center">${qty}</div>
+              <button aria-label="Increase ${MENU[id].name}" data-action="inc" data-id="${id}">+</button>
+              <button aria-label="Remove ${MENU[id].name}" data-action="remove" data-id="${id}" style="margin-left:8px;background:transparent;border:none;cursor:pointer;color:var(--muted)">✕</button>
+            </div>
+          </div>
+        `;
+        cartList.appendChild(row);
+      }
+
+      // attach qty handlers
+      cartList.querySelectorAll('button[data-action]').forEach(b=>{
+        b.addEventListener('click', e=>{
+          const act = e.currentTarget.dataset.action;
+          const id = e.currentTarget.dataset.id;
+          if (act === 'inc') addToCart(id, 1);
+          if (act === 'dec') addToCart(id, -1);
+          if (act === 'remove') { delete cart[id]; renderCart(); }
+        });
+      });
+
+      totalAmount.textContent = '₹' + calculateTotal();
+    }
+
+    // initial render
+    renderCart();
+
+    // Accessibility: keyboard shortcut 'm' to focus menu, 'c' to focus cart (case-insensitive)
+    document.addEventListener('keydown', (e)=>{
+      const key = e.key?.toLowerCase();
+      if (key === 'm') { document.getElementById('menu').scrollIntoView({behavior:'smooth'}); }
+      if (key === 'c') { placeOrderBtn.focus(); }
+    });
+
+    // Small helper: populate menu grid from MENU (if you want to programmatically update)
+    (function syncMenuFromData(){
+      // This snippet demonstrates how to auto-sync price text if MENU changes.
+      Object.keys(MENU).forEach(id=>{
+        const block = document.querySelector(`[data-id="${id}"]`);
+        if (!block) return;
+        const priceEl = block.querySelector('.price');
+        if (priceEl) priceEl.textContent = '₹' + MENU[id].price;
+        const nameEl = block.querySelector('.name');
+        if (nameEl) nameEl.textContent = MENU[id].name;
+      });
+    })();
+  </script>
+</body>
+</html>
